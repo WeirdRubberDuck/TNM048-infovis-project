@@ -5,8 +5,8 @@
  */
 
 queue()
-  .defer(d3.csv,'data/world-happiness-report/2015.csv')
-  .defer(d3.csv,'data/world-happiness-report/2016.csv')
+  .defer(d3.csv,'data/extended2015.csv')
+  .defer(d3.csv,'data/extended2016.csv')
   .defer(d3.csv,'data/world-happiness-report/2017.csv')
   .await(draw);
 
@@ -16,10 +16,10 @@ function draw(error, data1, data2, data3){
   if (error) throw error;
 
   // Choose data to visualise
-  data = data3;
+  data = data2;
 
   pc = new pc(data);
 
-  var key = "Happiness.Score"; // OBS! TODO: Rename in file...
+  var key = "Happiness Score"; // OBS! TODO: Rename in file...
   map = new worldMap(data, key);
 }
