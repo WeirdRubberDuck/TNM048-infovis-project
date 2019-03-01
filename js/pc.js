@@ -39,12 +39,17 @@ function pc(data){
         .append("svg:g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    //List of dimensions we want to exclude from the pc plot
+    var excludedDims = ['Country', 'Region', 'Happiness.Rank','Standard Error','Whisker.high','Whisker.low'];
+    //List of dimensions that should be possible to hide/expand, part of happiness report
+    var happyDims = ['Economy (GDP per Capita)','Family','Health (Life Expectancy)','Freedom','Trust (Government Corruption)','Generosity','Dystopia Residual'];
+
     //Extract the list of dimensions and create a scale for each.
     //keys are the the axes names gathered from the dataset, we want to 
     //create as many axes as there are keys in the dataset 
     //Scale,domain and range for each axes. 
     xScale.domain(dimensions = d3.keys(data[0]).filter(function (d) {
-        return d != "Country" && (yScale[d] = d3.scaleLinear()
+        return !excludedDims.includes(d) && (yScale[d] = d3.scaleLinear()
             .domain(d3.extent(data, function (p) { return +p[d]; }))
             .range([height, 0])
         );
