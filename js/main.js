@@ -10,11 +10,16 @@ queue()
   .defer(d3.csv,'data/world-happiness-report/2017.csv')
   .await(draw);
 
-var pc;
+var pc, map;
 
 function draw(error, data1, data2, data3){
   if (error) throw error;
 
-  pc = new pc(data1);
+  // Choose data to visualise
+  data = data2;
 
+  pc = new pc(data);
+
+  var key = "Happiness Score"; // OBS! TODO: Rename in file...
+  map = new worldMap(data, key);
 }
