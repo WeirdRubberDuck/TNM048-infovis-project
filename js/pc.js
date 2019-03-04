@@ -11,7 +11,7 @@ function pc(data, colorpalette, key){
     //Set width and height of the chart
     var div = '#pc-chart';
     var parentWidth = $(div).parent().width();
-    var margin = { top: 40, right: 10, bottom: 10, left: 30 },
+    var margin = { top: 60, right: 60, bottom: 20, left: 60 },
         width = parentWidth - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
@@ -119,8 +119,9 @@ function pc(data, colorpalette, key){
         .attr("class", "axis")
         .each(function (d) { d3.select(this).call(d3.axisLeft(yScale[d])); })
         .append("text")
-        .attr("text-anchor", "middle")
-        .attr("y", -9)
+        .attr("text-anchor", "middle")  
+        .attr("y", -15)
+        .attr("transform", "rotate(-15)")
         .style('fill', 'black')
         .text(String);
 
