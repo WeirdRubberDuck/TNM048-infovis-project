@@ -8,10 +8,7 @@
  * @author Emma Broman & Ingela Rossing
  */
 
-function worldMap(data, color, key_score){
-
-    //var key_score = "Happiness Score"; // OBS! TODO: Rename in file...
-    var key_rank = "Happiness Rank"; // OBS! TODO: Rename in file...
+function worldMap(data, color, key_score, key_rank){
 
     //Set width and height of the chart
     var div = '#world-map-chart';
