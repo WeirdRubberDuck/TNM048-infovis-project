@@ -6,7 +6,7 @@
  * @author Emma Broman & Ingela Rossing
  */
 
-function pc(data){
+function pc(data, colorpalette, key){
 
     //Set width and height of the chart
     var div = '#pc-chart';
@@ -20,9 +20,6 @@ function pc(data){
     var xScale = d3.scaleBand().range([0, width]);
     var yScale = {};
     var dragging = {};
-
-    //Selecting colors for the paths (each line)
-    var colors = colorbrewer.Set2[6];   // TODO: Use another set of colours
 
     //For each line, foreground is the colored lines we see
     //background are the gray lines we see when we filter.
@@ -72,7 +69,7 @@ function pc(data){
         .data(data)
         .enter().append("path")
         .attr("d", path)
-        .style("stroke", function (d, i) { return colors[1]; }); // change line colour
+        .style("stroke", function (d, i) { return colorpalette(d[key]); }); 
 
     // Define drag beavior
     var dragBehaviour = d3.drag();      
