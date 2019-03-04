@@ -1,7 +1,7 @@
 
 .background path {
   fill: none;
-  stroke: lightgray;
+  stroke: #eee;
   stroke-width: 0.5px;
   pointer-events: stroke;
 }
@@ -9,7 +9,7 @@
 .foreground path {
   fill: none;
   stroke: steelblue;
-  stroke-width: 0.5px;
+  stroke-width: 0.9px;
 }
 
 .axis .title {
@@ -71,25 +71,26 @@ div.tooltip {
     opacity: 0.5;
 }
 
-      svg {
-      font: 10px sans-serif;
-      }
+svg {
+font: 10px sans-serif;
+
+}
 
 
-      .brush .extent {
-      fill-opacity: .3;
-      stroke: #fff;
-      shape-rendering: crispEdges;
-      }
+.brush .extent {
+fill-opacity: .3;
+stroke: #fff;
+shape-rendering: crispEdges;
+}
 
-      .axis line,
-      .axis path {
-      fill: none;
-      stroke: #000;
-      shape-rendering: crispEdges;
-      }
+.axis line,
+.axis path {
+fill: none;
+stroke: #000;
+shape-rendering: crispEdges;
+}
 
-      .axis text {
-      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-      cursor: move;
-      }
+.axis text {
+text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+cursor: move;
+}

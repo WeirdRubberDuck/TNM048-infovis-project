@@ -18,8 +18,17 @@ function draw(error, data1, data2, data3){
   // Choose data to visualise
   data = data2;
 
-  pc = new pc(data);
+  //Selecting colors for the paths (each line)
+  //var colors = colorbrewer.Set2[6]; 
 
-  var key = "Happiness Score"; // OBS! TODO: Rename in file...
+  // Colors to use 
+  var color = d3.scaleThreshold()
+        .domain([3.0,4.0,5.0,6.0,7.0])
+        .range(['rgb(215,48,39)','rgb(252,141,89)','rgb(254,224,139)','rgb(217,239,139)','rgb(145,207,96)','rgb(26,152,80)']); 
+
+  var key = "Happiness Score"; //Used for choosing color
+
+  pc = new pc(data,color, key);
+
   map = new worldMap(data, key);
 }
