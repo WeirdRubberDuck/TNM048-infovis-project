@@ -10,16 +10,13 @@ queue()
   .defer(d3.csv,'data/world-happiness-report/2017.csv')
   .await(draw);
 
-var pc, map;
+var pc, map, stars;
 
 function draw(error, data1, data2, data3){
   if (error) throw error;
 
   // Choose data to visualise
-  data = data2;
-
-  //Selecting colors for the paths (each line)
-  //var colors = colorbrewer.Set2[6]; 
+  data = data1;
 
   // Colors to use 
   var color = d3.scaleThreshold()
@@ -28,7 +25,9 @@ function draw(error, data1, data2, data3){
 
   var key = "Happiness Score"; //Used for choosing color
 
-  pc = new pc(data,color, key);
+  pc = new pc(data, color, key);
 
   map = new worldMap(data, color, key);
+
+  stars = new starplot(data, color, key);
 }
