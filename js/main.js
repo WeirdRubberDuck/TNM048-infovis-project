@@ -30,5 +30,5 @@ function draw(error, data1, data2, data3){
 
   pc = new pc(data,color, key);
 
-  map = new worldMap(data, key);
+  map = new worldMap(data, color, key);
 }

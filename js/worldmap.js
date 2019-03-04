@@ -8,11 +8,9 @@
  * @author Emma Broman & Ingela Rossing
  */
 
-function worldMap(data){
+function worldMap(data, color, key_score){
 
-    console.log("Create world map...");
-
-    var key_score = "Happiness Score"; // OBS! TODO: Rename in file...
+    //var key_score = "Happiness Score"; // OBS! TODO: Rename in file...
     var key_rank = "Happiness Rank"; // OBS! TODO: Rename in file...
 
     //Set width and height of the chart
@@ -30,11 +28,6 @@ function worldMap(data){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .attr('class', 'map');
     
-    // Colors to use 
-    var color = d3.scaleThreshold()
-        .domain([1.0,2.0,3.0,4.0,5.0,6.0,7.0])
-        .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)","rgb(33,113,181)"]);
-    // TODO: Use a better color scale. Preferably using color brewer
     var colorUndefined ="rgb(200,200,210)";
 
     var projection = d3.geoMercator()
