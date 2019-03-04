@@ -31,7 +31,7 @@ function pc(data, colorpalette, key){
 
     //Select the div and append our svg tag.
     var svg = d3.select(div).append("svg")
-        .attr("width", width)
+        .attr("width", width + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("svg:g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
