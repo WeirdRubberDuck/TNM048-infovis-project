@@ -5,8 +5,6 @@
  */
 function starplot(data, dataItem, colorpalette, key, div){
 
-  console.log(data);
-
   var margin = {
     top: 36,
     right: 50,
