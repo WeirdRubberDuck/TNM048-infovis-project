@@ -10,8 +10,10 @@
 
 function worldMap(data, color, key_score, key_rank){
 
+    var selectedPath = null; // Variable for the currently selected country
+
     // Set width and height of the chart
-    var div = '#world-map-chart';
+    var div = '#map-chart';
     var parentWidth = $(div).parent().width();
     var margin = { top: 40, right: 10, bottom: 10, left: 30 },
         width = parentWidth - margin.left - margin.right,
@@ -24,7 +26,7 @@ function worldMap(data, color, key_score, key_rank){
         .append('g')
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .attr('class', 'map');
-    
+
     // Add legend describing the color coding
     var legend = d3.legendColor()
         .shapeWidth(30)
@@ -36,9 +38,7 @@ function worldMap(data, color, key_score, key_rank){
 
     svg.append("g")
        .attr("class", "colorLegend")
-       .attr("transform", "translate(20,20)");
-      
-    svg.select(".colorLegend")
+       .attr("transform", "translate(-20," + (height - 120) + ")")
        .call(legend);
     
     // Color to use where there is no data
@@ -79,12 +79,12 @@ function worldMap(data, color, key_score, key_rank){
 
         // Set values for each country
         data.forEach(function(d) { 
-            happynessPerCountry[d.Country] = +d[key_score]; 
-            rankPerCountry[d.Country] = +d[key_rank]; 
+            happynessPerCountry[d.id] = +d[key_score]; 
+            rankPerCountry[d.id] = +d[key_rank]; 
         });
         mapData.features.forEach(function(d) { 
-            d[key_score] = happynessPerCountry[d.properties.name] 
-            d[key_rank] = rankPerCountry[d.properties.name] 
+            d[key_score] = happynessPerCountry[d.id] 
+            d[key_rank] = rankPerCountry[d.id] 
         });
 
         svg.append("g")
@@ -94,37 +94,68 @@ function worldMap(data, color, key_score, key_rank){
             .enter().append("path")
             .attr("d", path)
             .style("fill", function(d) { 
-                var fillColor = color(happynessPerCountry[d.properties.name]);
+                var fillColor = color(happynessPerCountry[d.id]);
                 if(!fillColor) fillColor = colorUndefined;
                 return fillColor;
             })
-            .style('stroke', 'white')
-            .style('stroke-width', 1.0)
+            .style("stroke", "white")
+            .style("stroke-width", 0.3)
             .style("opacity",0.8)
             // tooltips
-            .style("stroke","white")
-            .style('stroke-width', 0.3)
-            .on('mouseover',function(d){
+            .on("mouseover",function(d){
                 tip.show(d);
 
-                d3.select(this)
-                    .style("opacity", 1)
-                    .style("stroke","white")
-                    .style("stroke-width",3);
+                if(this !== selectedPath) {
+                    onHoverStyle(this);
+                }
             })
-            .on('mouseout', function(d){
+            .on("mouseout", function(d){
                 tip.hide(d);
 
-                d3.select(this)
-                    .style("opacity", 0.8)
-                    .style("stroke","white")
-                    .style("stroke-width",0.3);
+                if(this !== selectedPath) {
+                    resetStyle(this);
+                }
+            })
+            // Handle selection
+            .on('click', function(d, i) {
+                if(this === selectedPath) {
+                    // Clear selection
+                    selectedPath = null;
+                    resetStyle(this);
+                } else {
+                    // Reset old selected
+                    resetStyle(selectedPath);
+                    // Set new selected
+                    selectedPath = this;
+                    selectedStyle(selectedPath);
+                }
             });
+            
+        function onHoverStyle(p){
+            d3.select(p)
+            .style("opacity", 1)
+            .style("stroke","white")
+            .style("stroke-width",2);
+        }
+
+        function selectedStyle(p){
+            d3.select(p)
+              .style("opacity", 1)
+              .style("stroke","cyan") // TODO: create variable for selected color
+              .style("stroke-width",3);
+        }
+
+        function resetStyle(p){
+            d3.select(p)
+              .style("opacity", 0.8)
+              .style("stroke","white")
+              .style("stroke-width",0.5);
+        }
 
         svg.append("path")
-            .datum(topojson.mesh(mapData.features, function(a, b) { return a.id !== b.id; }))
-            .attr("class", "names")
-            .attr("d", path);
+           .datum(topojson.mesh(mapData.features, function(a, b) { return a.id !== b.id; }))
+           .attr("class", "names")
+           .attr("d", path);
     }
 
 } // end of worldMap
