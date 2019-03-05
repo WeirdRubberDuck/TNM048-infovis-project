@@ -38,11 +38,25 @@ function worldMap(data, color, key_score, key_rank){
 
     svg.append("g")
        .attr("class", "colorLegend")
-       .attr("transform", "translate(-20," + (height - 120) + ")")
+       .attr("transform", "translate(-20," + (height - 140) + ")")
        .call(legend);
     
+
     // Color to use where there is no data
     var colorUndefined ="rgb(200,200,210)";
+
+    // Add legend for no data colour
+    var noDataLegend =  d3.legendColor()
+        .shapeWidth(30)
+        .orient('vertical')
+        .scale(d3.scaleOrdinal()
+            .domain(["No data"])
+            .range([colorUndefined]));
+                
+    svg.append("g")
+       .attr("class", "colorLegend")
+       .attr("transform", "translate(-20," + (height - 20) + ")")
+       .call(noDataLegend);
 
     var projection = d3.geoMercator()
                        .scale(130)
@@ -155,6 +169,7 @@ function worldMap(data, color, key_score, key_rank){
           .style("stroke-width",0.5);
     }
 
+    // TODO: Refactor! Perhaps send a callback function in the header that sets the selected data
     var starDiv = '#star-plot';
 
     function createStarPlot(id) {
