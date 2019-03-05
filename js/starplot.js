@@ -66,7 +66,7 @@ function starplot(data, colorpalette, key){
         .datum(d)
         .call(star)
 
-    d3.select('#star' + d.Country)
+    d3.select('#star' + d.id)
       // id is specified in lib/d3-starplot.js
       .style('fill', colorpalette(d[key])) 
 

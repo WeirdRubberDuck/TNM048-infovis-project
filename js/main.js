@@ -27,7 +27,7 @@ function draw(error, data1, data2, data3){
   var key_score = "Happiness Score";    //Used for choosing color
   var key_rank = "Happiness Rank"; 
 
-  pc = new pc(data,color, key_score);
+  pc = new pc(data, color, key_score);
 
   map = new worldMap(data, color, key_score, key_rank);
 

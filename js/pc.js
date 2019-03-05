@@ -37,7 +37,7 @@ function pc(data, colorpalette, key){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     //List of dimensions we want to exclude from the pc plot
-    var excludedDims = ['Country', 'Region', 'Lower Confidence Interval','Upper Confidence Interval', 'Happiness.Rank', 'Happiness Rank','Standard Error','Whisker.high','Whisker.low'];
+    var excludedDims = ['Country', 'Region', 'Lower Confidence Interval','Upper Confidence Interval', 'Happiness.Rank', 'Happiness Rank','Standard Error','Whisker.high','Whisker.low','id'];
     //List of dimensions that should be possible to hide/expand, part of happiness report
     var happyDims = ['Economy (GDP per Capita)','Family','Health (Life Expectancy)','Freedom','Trust (Government Corruption)','Generosity','Dystopia Residual'];
 
