@@ -3,7 +3,10 @@
  * @LastUpdate ...
  * @author Emma Broman & Ingela Rossing
  */
-function starplot(data, colorpalette, key){
+function starplot(data, dataItem, colorpalette, key, div){
+
+  console.log(data);
+
   var margin = {
     top: 36,
     right: 50,
@@ -14,11 +17,8 @@ function starplot(data, colorpalette, key){
   var height = 240 - margin.top - margin.bottom;
   var labelMargin = 15;
 
-  var dim2017 = ['Economy..GDP.per.Capita.','Family','Health..Life.Expectancy.','Freedom','Generosity','Trust..Government.Corruption.','Dystopia.Residual'];
-  var dim2015 = ['Economy (GDP per Capita)','Family','Health (Life Expectancy)','Freedom','Trust (Government Corruption)','Generosity','Dystopia Residual'];
-
   // The dimensions to include in the plot, including labels and an array that will containt the scale for each dimension
-  var dimensions = dim2015;
+  var dimensions = ['Economy (GDP per Capita)','Family','Health (Life Expectancy)','Freedom','Trust (Government Corruption)','Generosity','Dystopia Residual'];
   var labels = ['Economy','Family','Health','Freedom','Trust','Generosity','Dystopia Residual'];
   var scales = [];
 
@@ -53,12 +53,13 @@ function starplot(data, colorpalette, key){
     .width(width)
     .title(function(d) { return d.Country; })
     .margin(margin)
-    .labelMargin(labelMargin)
-
-  data.forEach(function(d, i) {
+    .labelMargin(labelMargin);
+  
+  // TODO: handle this in a better way
+  dataItem.forEach(function(d, i) {
     star.includeLabels(true);
 
-    d3.select('#star-plot').append('svg')
+    d3.select(div).append('svg') 
       .attr('class', 'chart')
       .attr('width', width + margin.left + margin.right)
       .attr('height', width + margin.top + margin.bottom)

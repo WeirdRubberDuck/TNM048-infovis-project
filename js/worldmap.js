@@ -122,40 +122,50 @@ function worldMap(data, color, key_score, key_rank){
                     // Clear selection
                     selectedPath = null;
                     resetStyle(this);
+                    clearStarPlot() 
                 } else {
                     // Reset old selected
                     resetStyle(selectedPath);
                     // Set new selected
                     selectedPath = this;
                     selectedStyle(selectedPath);
-                }
+                    createStarPlot(selectedPath.__data__.id);
+                }   
             });
-            
-        function onHoverStyle(p){
-            d3.select(p)
-            .style("opacity", 1)
-            .style("stroke","white")
-            .style("stroke-width",2);
-        }
-
-        function selectedStyle(p){
-            d3.select(p)
-              .style("opacity", 1)
-              .style("stroke","cyan") // TODO: create variable for selected color
-              .style("stroke-width",3);
-        }
-
-        function resetStyle(p){
-            d3.select(p)
-              .style("opacity", 0.8)
-              .style("stroke","white")
-              .style("stroke-width",0.5);
-        }
-
-        svg.append("path")
-           .datum(topojson.mesh(mapData.features, function(a, b) { return a.id !== b.id; }))
-           .attr("class", "names")
-           .attr("d", path);
     }
+    
+    function onHoverStyle(p){
+        d3.select(p)
+        .style("opacity", 1)
+        .style("stroke","white")
+        .style("stroke-width",2);
+    }
+
+    function selectedStyle(p){
+        d3.select(p)
+          .style("opacity", 1)
+          .style("stroke","cyan") // TODO: create variable for selected color
+          .style("stroke-width",3);
+    }
+
+    function resetStyle(p){
+        d3.select(p)
+          .style("opacity", 0.8)
+          .style("stroke","white")
+          .style("stroke-width",0.5);
+    }
+
+    var starDiv = '#star-plot';
+
+    function createStarPlot(id) {
+        clearStarPlot();
+        var item = data.filter(function(d){return d.id == selectedPath.__data__.id;});
+        starplot(data, item, color, key_score, starDiv);
+    }
+
+    function clearStarPlot() {
+        d3.select(starDiv).selectAll("*").remove();
+    }
+
 
 } // end of worldMap
