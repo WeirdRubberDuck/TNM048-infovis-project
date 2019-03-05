@@ -10,14 +10,14 @@
 
 function worldMap(data, color, key_score, key_rank){
 
-    //Set width and height of the chart
+    // Set width and height of the chart
     var div = '#world-map-chart';
     var parentWidth = $(div).parent().width();
     var margin = { top: 40, right: 10, bottom: 10, left: 30 },
         width = parentWidth - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
-    //Select the div and append our svg tag.
+    // Select the div and append our svg tag.
     var svg = d3.select(div).append("svg")
         .attr("width", width)
         .attr("height", height + margin.top + margin.bottom)
@@ -25,6 +25,23 @@ function worldMap(data, color, key_score, key_rank){
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .attr('class', 'map');
     
+    // Add legend describing the color coding
+    var legend = d3.legendColor()
+        .shapeWidth(30)
+        .orient('vertical')
+        .labels(d3.legendHelpers.thresholdLabels)
+        .title(key_score)
+        .labelFormat(d3.format(".0f"))
+        .scale(color);
+
+    svg.append("g")
+       .attr("class", "colorLegend")
+       .attr("transform", "translate(20,20)");
+      
+    svg.select(".colorLegend")
+       .call(legend);
+    
+    // Color to use where there is no data
     var colorUndefined ="rgb(200,200,210)";
 
     var projection = d3.geoMercator()
