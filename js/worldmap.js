@@ -52,6 +52,8 @@ function worldMap(data, color, key_score, key_rank){
 
     // To format happiness score :)
     var format = d3.format(".3n");
+    
+
 
     // Function for setting tooltips
     var tip = d3.tip()
@@ -59,6 +61,7 @@ function worldMap(data, color, key_score, key_rank){
         .offset([-10, 0])
         .html(function(d) {
             return "<strong><span class='details'>" + d.properties.name + "</span></strong>" 
+                + "<span class='details'> <img src=icons/emoji" + emojinr(d[key_score]) + ".png height='42'></span>"
                 + "<br>"
                 + "Happiness Score: <span class='details'>"  + format(d[key_score]) +"</span>"
                 + "<br>"
@@ -159,3 +162,16 @@ function worldMap(data, color, key_score, key_rank){
     }
 
 } // end of worldMap
+
+
+// To choose emoji using rank
+function emojinr(d){
+    var nr = d3.scaleThreshold()
+    .domain([3.0,4.0,5.0,6.0,7.0]) //TODO: get domain from color variable insted!
+    .range(['1','2','3','4','5','6']); 
+
+    if(nr(d))
+        return nr(d);
+    else
+        return "X"
+}
