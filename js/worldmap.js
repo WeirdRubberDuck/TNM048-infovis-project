@@ -8,7 +8,7 @@
  * @author Emma Broman & Ingela Rossing
  */
 
-function worldMap(data, color){
+function worldMap(data){
 
     var selectedPath = null; // Variable for the currently selected country
 
@@ -34,7 +34,7 @@ function worldMap(data, color){
         .labels(d3.legendHelpers.thresholdLabels)
         .title(KEY_SCORE)
         .labelFormat(d3.format(".0f"))
-        .scale(color);
+        .scale(COLOR_MAP);
 
     svg.append("g")
        .attr("class", "colorLegend")
@@ -109,7 +109,7 @@ function worldMap(data, color){
             .enter().append("path")
             .attr("d", path)
             .style("fill", function(d) { 
-                var fillColor = color(happynessPerCountry[d.id]);
+                var fillColor = COLOR_MAP(happynessPerCountry[d.id]);
                 if(!fillColor) fillColor = colorUndefined;
                 return fillColor;
             })
@@ -179,7 +179,7 @@ function worldMap(data, color){
     function createStarPlot(id) {
         clearStarPlot();
         var item = data.find(function(d){return d.id == selectedPath.__data__.id;});
-        starplot(data, item, color, detailsDiv);
+        starplot(data, item, detailsDiv);
     }
 
     function clearStarPlot() {

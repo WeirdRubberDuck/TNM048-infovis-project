@@ -3,7 +3,7 @@
  * @LastUpdate ...
  * @author Emma Broman & Ingela Rossing
  */
-function starplot(data, selectedData, colorpalette, div){
+function starplot(data, selectedData, div){
 
   var margin = {
     top: 36,
@@ -87,7 +87,7 @@ function starplot(data, selectedData, colorpalette, div){
 
   d3.select('#star' + selectedData.id)
     // id is specified in lib/d3-starplot.js
-    .style('fill', colorpalette(selectedData[KEY_SCORE])) 
+    .style('fill', COLOR_MAP(selectedData[KEY_SCORE])) 
 
 } //end starplot 
 
