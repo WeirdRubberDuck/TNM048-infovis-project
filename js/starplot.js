@@ -68,9 +68,6 @@ function starplot(data, dataItem, colorpalette, key, div){
     d3.select('#star' + d.id)
       // id is specified in lib/d3-starplot.js
       .style('fill', colorpalette(d[key])) 
-
-    console.log()
-
   });
 
 } //end starplot 
