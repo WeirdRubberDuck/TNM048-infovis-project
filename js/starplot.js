@@ -3,7 +3,7 @@
  * @LastUpdate ...
  * @author Emma Broman & Ingela Rossing
  */
-function starplot(data, dataItem, colorpalette, key, div){
+function starplot(data, selectedData, colorpalette, key, div){
 
   var margin = {
     top: 36,
@@ -52,9 +52,16 @@ function starplot(data, dataItem, colorpalette, key, div){
     .title(function(d) { return d.Country; })
     .margin(margin)
     .labelMargin(labelMargin);
+
+  // Dipsplay that the selected item doesn't have data
+  if(isEmpty(selectedData)) {
+     d3.select(div).append("text")
+      .attr('text-anchor', 'middle')
+      .text("No data available");
+  }           
   
   // TODO: handle this in a better way
-  dataItem.forEach(function(d, i) {
+  selectedData.forEach(function(d, i) {
     star.includeLabels(true);
 
     d3.select(div).append('svg') 
@@ -74,4 +81,14 @@ function starplot(data, dataItem, colorpalette, key, div){
   });
 
 } //end starplot 
+
+
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+  }   
   
