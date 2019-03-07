@@ -8,7 +8,7 @@
  * @author Emma Broman & Ingela Rossing
  */
 
-function worldMap(data, color, key_score, key_rank){
+function worldMap(data, color){
 
     var selectedPath = null; // Variable for the currently selected country
 
@@ -32,7 +32,7 @@ function worldMap(data, color, key_score, key_rank){
         .shapeWidth(30)
         .orient('vertical')
         .labels(d3.legendHelpers.thresholdLabels)
-        .title(key_score)
+        .title(KEY_SCORE)
         .labelFormat(d3.format(".0f"))
         .scale(color);
 
@@ -73,11 +73,11 @@ function worldMap(data, color, key_score, key_rank){
         .offset([-10, 0])
         .html(function(d) {
             return "<strong><span class='details'>" + d.properties.name + "</span></strong>" 
-                + "<span class='details'> <img src=icons/emoji" + emojinr(d[key_score]) + ".png height='42'></span>"
+                + "<span class='details'> <img src=icons/emoji" + emojinr(d[KEY_SCORE]) + ".png height='42'></span>"
                 + "<br>"
-                + "Happiness Score: <span class='details'>"  + format(d[key_score]) +"</span>"
+                + "Happiness Score: <span class='details'>"  + format(d[KEY_SCORE]) +"</span>"
                 + "<br>"
-                + "Rank: " + "<span class='details'>" + d[key_rank] + "</span>" ;
+                + "Rank: " + "<span class='details'>" + d[KEY_RANK] + "</span>" ;
         })
 
     svg.call(tip);
@@ -94,12 +94,12 @@ function worldMap(data, color, key_score, key_rank){
 
         // Set values for each country
         data.forEach(function(d) { 
-            happynessPerCountry[d.id] = +d[key_score]; 
-            rankPerCountry[d.id] = +d[key_rank]; 
+            happynessPerCountry[d.id] = +d[KEY_SCORE]; 
+            rankPerCountry[d.id] = +d[KEY_RANK]; 
         });
         mapData.features.forEach(function(d) { 
-            d[key_score] = happynessPerCountry[d.id] 
-            d[key_rank] = rankPerCountry[d.id] 
+            d[KEY_SCORE] = happynessPerCountry[d.id] 
+            d[KEY_RANK] = rankPerCountry[d.id] 
         });
 
         svg.append("g")
@@ -164,8 +164,7 @@ function worldMap(data, color, key_score, key_rank){
 
     function selectPath(p, isSelected){
         d3.select(p)
-          .classed("country-selected",isSelected)
-          //.classed("country-hovered",false);
+          .classed("country-selected", isSelected)
     }
 
     function resetStyle(p){
@@ -175,28 +174,16 @@ function worldMap(data, color, key_score, key_rank){
     }
 
     // TODO: Refactor! Perhaps send a callback function in the header that sets the selected data
-    var starDiv = '#star-plot';
+    var detailsDiv = '#country-details';
 
     function createStarPlot(id) {
         clearStarPlot();
-        var item = data.filter(function(d){return d.id == selectedPath.__data__.id;});
-        starplot(data, item, color, key_score, starDiv);
+        var item = data.find(function(d){return d.id == selectedPath.__data__.id;});
+        starplot(data, item, color, detailsDiv);
     }
 
     function clearStarPlot() {
-        d3.select(starDiv).selectAll("*").remove();
+        d3.select(detailsDiv).selectAll("*").remove();
     }
 
 } // end of worldMap
-
-// To choose emoji using rank
-function emojinr(d){
-    var nr = d3.scaleThreshold()
-    .domain([3.0,4.0,5.0,6.0,7.0]) //TODO: get domain from color variable insted!
-    .range(['1','2','3','4','5','6']); 
-
-    if(nr(d))
-        return nr(d);
-    else
-        return "X"
-}

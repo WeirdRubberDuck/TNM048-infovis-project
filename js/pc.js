@@ -6,7 +6,7 @@
  * @author Emma Broman & Ingela Rossing
  */
 
-function pc(data, colorpalette, key){
+function pc(data, colorpalette){
 
     //Set width and height of the chart
     var div = '#pc-chart';
@@ -69,7 +69,7 @@ function pc(data, colorpalette, key){
         .data(data)
         .enter().append("path")
         .attr("d", path)
-        .style("stroke", function (d, i) { return colorpalette(d[key]); }); 
+        .style("stroke", function (d, i) { return colorpalette(d[KEY_SCORE]); }); 
 
     // Define drag beavior
     var dragBehaviour = d3.drag();      
