@@ -4,19 +4,23 @@
  * @author Emma Broman & Ingela Rossing
  */
 
+// Read all available in the beginning
 queue()
   .defer(d3.csv,'data/extended2015_nice_headers.csv')
   .defer(d3.csv,'data/extended2016_nice_headers.csv')
-  .defer(d3.csv,'data/world-happiness-report/2017.csv')
   .await(draw);
 
-var pc, map, stars;
+var pc, map, stars, year;
 
-function draw(error, data1, data2, data3){
-  if (error) throw error;
+function draw(error, data1, data2){
 
-  // Choose data to visualise
-  data = data1;
+  var year1 = document.getElementById("Year");
+  var year = year1.options[year1.selectedIndex].value;
+
+  if(year === "2015")
+    var data = data1;
+  else// if (year === "2015")
+    var data = data2;
 
   // Colors to use 
   var color = d3.scaleThreshold()
@@ -31,3 +35,4 @@ function draw(error, data1, data2, data3){
 
   map = new worldMap(data, color, key_score, key_rank);
 }
+

@@ -28,9 +28,17 @@
   <![endif]-->
 
   <div class="container-fluid">
-
-      <h1 class="card-header text-center">Visualizing World Happiness</h1>
-
+     
+      <div class="card">
+        <div class="card-header">
+          <h1 >Visualizing World Happiness</h1>
+          Choose year:
+          <select id="Year" name="Year" >
+            <option selected="" onclick="year=2016; window.location.reload();">2016</option>
+            <option onclick="year=2016; window.location.reload();">2015 </option>
+          </select>
+        </div>
+      </div>
       <!-- World Map -->
       <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -52,6 +60,7 @@
                           What is this and what is happiness? <a href="infotext.html" target="_blank">More info</a>
                       </div>
                     </div>
+
                   </div>
                 </div>
               </div>
