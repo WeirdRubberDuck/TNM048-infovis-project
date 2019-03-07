@@ -8,7 +8,7 @@
  * @author Emma Broman & Ingela Rossing
  */
 
-function worldMap(data, color, key_score, key_rank){
+function worldMap(data){
 
     var selectedPath = null; // Variable for the currently selected country
 
@@ -32,9 +32,9 @@ function worldMap(data, color, key_score, key_rank){
         .shapeWidth(30)
         .orient('vertical')
         .labels(d3.legendHelpers.thresholdLabels)
-        .title(key_score)
+        .title(KEY_SCORE)
         .labelFormat(d3.format(".0f"))
-        .scale(color);
+        .scale(COLOR_MAP);
 
     svg.append("g")
        .attr("class", "colorLegend")
@@ -67,19 +67,17 @@ function worldMap(data, color, key_score, key_rank){
     // To format happiness score :)
     var format = d3.format(".3n");
     
-
-
     // Function for setting tooltips
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
             return "<strong><span class='details'>" + d.properties.name + "</span></strong>" 
-                + "<span class='details'> <img src=icons/emoji" + emojinr(d[key_score]) + ".png height='42'></span>"
+                + "<span class='details'> <img src=icons/emoji" + emojinr(d[KEY_SCORE]) + ".png height='42'></span>"
                 + "<br>"
-                + "Happiness Score: <span class='details'>"  + format(d[key_score]) +"</span>"
+                + "Happiness Score: <span class='details'>"  + format(d[KEY_SCORE]) +"</span>"
                 + "<br>"
-                + "Rank: " + "<span class='details'>" + d[key_rank] + "</span>" ;
+                + "Rank: " + "<span class='details'>" + d[KEY_RANK] + "</span>" ;
         })
 
     svg.call(tip);
@@ -96,12 +94,12 @@ function worldMap(data, color, key_score, key_rank){
 
         // Set values for each country
         data.forEach(function(d) { 
-            happynessPerCountry[d.id] = +d[key_score]; 
-            rankPerCountry[d.id] = +d[key_rank]; 
+            happynessPerCountry[d.id] = +d[KEY_SCORE]; 
+            rankPerCountry[d.id] = +d[KEY_RANK]; 
         });
         mapData.features.forEach(function(d) { 
-            d[key_score] = happynessPerCountry[d.id] 
-            d[key_rank] = rankPerCountry[d.id] 
+            d[KEY_SCORE] = happynessPerCountry[d.id] 
+            d[KEY_RANK] = rankPerCountry[d.id] 
         });
 
         svg.append("g")
@@ -111,92 +109,81 @@ function worldMap(data, color, key_score, key_rank){
             .enter().append("path")
             .attr("d", path)
             .style("fill", function(d) { 
-                var fillColor = color(happynessPerCountry[d.id]);
+                var fillColor = COLOR_MAP(happynessPerCountry[d.id]);
                 if(!fillColor) fillColor = colorUndefined;
                 return fillColor;
             })
-            .style("stroke", "white")
-            .style("stroke-width", 0.3)
-            .style("opacity",0.8)
+            .attr("class", "country-path")
             // tooltips
             .on("mouseover",function(d){
                 tip.show(d);
-
-                if(this !== selectedPath) {
-                    onHoverStyle(this);
-                }
+                if(this !== selectedPath) onHoverStyle(this);
             })
             .on("mouseout", function(d){
                 tip.hide(d);
-
-                if(this !== selectedPath) {
-                    resetStyle(this);
-                }
+                if(this !== selectedPath) resetStyle(this);
             })
             // Handle selection
-            .on('click', function(d, i) {
-                if(this === selectedPath) {
-                    // Clear selection
-                    selectedPath = null;
-                    resetStyle(this);
-                    clearStarPlot() 
-                } else {
-                    // Reset old selected
-                    resetStyle(selectedPath);
-                    // Set new selected
-                    selectedPath = this;
-                    selectedStyle(selectedPath);
-                    createStarPlot(selectedPath.__data__.id);
-                }   
-            });
+            .on('click', onCountryClick);//function(d, i) {
     }
+
+    function onCountryClick(d, i) {
+        if(this === selectedPath) {
+            // Clear selection
+            selectedPath = null;
+            resetStyle(this);
+            clearStarPlot() 
+        } else {
+            // Reset old selected
+            resetStyle(selectedPath);
+
+            // Set new selected
+            selectedPath = this;
+            selectPath(selectedPath, true);
+
+            // Show the star plot/details view for the selected country
+            createStarPlot(selectedPath.__data__.id);
+
+            // Select corresponding path in parcoords as well 
+            d3.select(".foreground")
+                .selectAll("path")
+                .classed("country-selected", function (p) {
+                    return p.id === selectedPath.__data__.id;
+                });
+            
+            // Put the selected path on top
+            d3.selectAll(".country-selected").raise();
+        }   
+    };
     
     function onHoverStyle(p){
         d3.select(p)
-        .style("opacity", 1)
-        .style("stroke","white")
-        .style("stroke-width",2);
+          .classed("country-hovered",true)
+          .classed("country-default",false);
     }
 
-    function selectedStyle(p){
+    function selectPath(p, isSelected){
         d3.select(p)
-          .style("opacity", 1)
-          .style("stroke","cyan") // TODO: create variable for selected color
-          .style("stroke-width",3);
+          .classed("country-selected", isSelected)
     }
 
     function resetStyle(p){
         d3.select(p)
-          .style("opacity", 0.8)
-          .style("stroke","white")
-          .style("stroke-width",0.5);
+          .classed("country-selected",false)
+          .classed("country-hovered",false);
     }
 
     // TODO: Refactor! Perhaps send a callback function in the header that sets the selected data
-    var starDiv = '#star-plot';
+    var detailsDiv = '#country-details';
 
     function createStarPlot(id) {
         clearStarPlot();
-        var item = data.filter(function(d){return d.id == selectedPath.__data__.id;});
-        starplot(data, item, color, key_score, starDiv);
+        var item = data.find(function(d){return d.id == selectedPath.__data__.id;});
+        starplot(data, item, detailsDiv);
     }
 
     function clearStarPlot() {
-        d3.select(starDiv).selectAll("*").remove();
+        d3.select(detailsDiv).selectAll("*").remove();
     }
 
-
 } // end of worldMap
-
-
-// To choose emoji using rank
-function emojinr(d){
-    var nr = d3.scaleThreshold()
-    .domain([3.0,4.0,5.0,6.0,7.0]) //TODO: get domain from color variable insted!
-    .range(['1','2','3','4','5','6']); 
-
-    if(nr(d))
-        return nr(d);
-    else
-        return "X"
-}
