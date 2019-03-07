@@ -105,9 +105,6 @@ function worldMap(data, color, key_score, key_rank){
         svg.append("g")
             .attr("class", "countries")
             .selectAll("path")
-            .filter(function() {
-                return !this.classList.contains('country-filtered')
-            })
             .data(mapData.features)
             .enter().append("path")
             .attr("d", path)
@@ -120,35 +117,44 @@ function worldMap(data, color, key_score, key_rank){
             // tooltips
             .on("mouseover",function(d){
                 tip.show(d);
-
-                if(this !== selectedPath) {
-                    onHoverStyle(this);
-                }
+                if(this !== selectedPath) onHoverStyle(this);
             })
             .on("mouseout", function(d){
                 tip.hide(d);
-
-                if(this !== selectedPath) {
-                    resetStyle(this);
-                }
+                if(this !== selectedPath) resetStyle(this);
             })
             // Handle selection
-            .on('click', function(d, i) {
-                if(this === selectedPath) {
-                    // Clear selection
-                    selectedPath = null;
-                    resetStyle(this);
-                    clearStarPlot() 
-                } else {
-                    // Reset old selected
-                    resetStyle(selectedPath);
-                    // Set new selected
-                    selectedPath = this;
-                    selectedStyle(selectedPath);
-                    createStarPlot(selectedPath.__data__.id);
-                }   
-            });
+            .on('click', onCountryClick);//function(d, i) {
     }
+
+    function onCountryClick(d, i) {
+        if(this === selectedPath) {
+            // Clear selection
+            selectedPath = null;
+            resetStyle(this);
+            clearStarPlot() 
+        } else {
+            // Reset old selected
+            resetStyle(selectedPath);
+
+            // Set new selected
+            selectedPath = this;
+            selectPath(selectedPath, true);
+
+            // Show the star plot/details view for the selected country
+            createStarPlot(selectedPath.__data__.id);
+
+            // Select corresponding path in parcoords as well 
+            d3.select(".foreground")
+                .selectAll("path")
+                .classed("country-selected", function (p) {
+                    return p.id === selectedPath.__data__.id;
+                });
+            
+            // Put the selected path on top
+            d3.selectAll(".country-selected").raise();
+        }   
+    };
     
     function onHoverStyle(p){
         d3.select(p)
@@ -156,9 +162,9 @@ function worldMap(data, color, key_score, key_rank){
           .classed("country-default",false);
     }
 
-    function selectedStyle(p){
+    function selectPath(p, isSelected){
         d3.select(p)
-          .classed("country-selected",true)
+          .classed("country-selected",isSelected)
           //.classed("country-hovered",false);
     }
 
@@ -181,9 +187,7 @@ function worldMap(data, color, key_score, key_rank){
         d3.select(starDiv).selectAll("*").remove();
     }
 
-
 } // end of worldMap
-
 
 // To choose emoji using rank
 function emojinr(d){

@@ -84,6 +84,8 @@
 
 .country-selected {
     fill-opacity: 1;
-    stroke: cyan;
-    stroke-width: 3;
-}
+    /* We always want to show the selected paths. !important => ovverride all other css */
+    stroke: cyan !important;
+    stroke-width: 3 !important;
+    display: inline !important;
+} 
