@@ -46,7 +46,7 @@ function pc(data, colorpalette, key){
     //create as many axes as there are keys in the dataset 
     //Scale,domain and range for each axes. 
     xScale.domain(dimensions = d3.keys(data[0]).filter(function (d) {
-        return !excludedDims.includes(d) && (yScale[d] = d3.scaleLinear()
+        return !excludedDims.includes(d) && !happyDims.includes(d) && (yScale[d] = d3.scaleLinear()
             .domain(d3.extent(data, function (p) { return +p[d]; }))
             .range([height, 0])
         );
