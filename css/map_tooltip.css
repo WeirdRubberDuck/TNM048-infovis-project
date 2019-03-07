@@ -61,6 +61,29 @@
     pointer-events:none;
 }*/
 
-.details{
+.details {
     color:white;
+}
+
+/* Controls for appearance of the countries in the map */
+.country-path {
+    fill-opacity: 0.8;
+    stroke: white;
+    stroke-width: 0.5;
+}
+
+.country-filtered {
+    fill-opacity: 0.2;
+}
+
+.country-hovered {
+    fill-opacity: 1;
+    stroke: white;
+    stroke-width: 2;
+}
+
+.country-selected {
+    fill-opacity: 1;
+    stroke: cyan;
+    stroke-width: 3;
 }

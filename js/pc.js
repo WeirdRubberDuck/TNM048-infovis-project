@@ -168,11 +168,35 @@ function pc(data, colorpalette, key){
             });
         foreground.style("display", function (d) {
             return actives.every(function (active) {
-                var dim = active.dim;
-                var ext = active.extent;
-                return ext[1] <= d[dim] && d[dim] <= ext[0];
+                return within(active, d);
             }) ? null : "none";
         });
+
+        // Set style of map elements (paths) based on brushing
+        d3.select(".countries")
+          .selectAll("path")
+          .classed("country-filtered", function (p) {
+
+            // Find data item with same id as the path p
+            dataItem = data.find(function(d) {
+                return d.id === p.id;
+            });
+
+            if(dataItem) {
+                return actives.every(function (active) {
+                    return within(active, dataItem);
+                }) ? false : true;
+            }
+            
+          });
+
+        // Test if the data point item lies within the selection
+        function within(selection, item) {
+            var dim = selection.dim;
+            var ext = selection.extent;
+            return ext[1] <= item[dim] && item[dim] <= ext[0];
+        }
+
     }//end of brush
     //------------------------------------------------------------------------------------->
 

@@ -67,8 +67,6 @@ function worldMap(data, color, key_score, key_rank){
     // To format happiness score :)
     var format = d3.format(".3n");
     
-
-
     // Function for setting tooltips
     var tip = d3.tip()
         .attr('class', 'd3-tip')
@@ -107,6 +105,9 @@ function worldMap(data, color, key_score, key_rank){
         svg.append("g")
             .attr("class", "countries")
             .selectAll("path")
+            .filter(function() {
+                return !this.classList.contains('country-filtered')
+            })
             .data(mapData.features)
             .enter().append("path")
             .attr("d", path)
@@ -115,9 +116,7 @@ function worldMap(data, color, key_score, key_rank){
                 if(!fillColor) fillColor = colorUndefined;
                 return fillColor;
             })
-            .style("stroke", "white")
-            .style("stroke-width", 0.3)
-            .style("opacity",0.8)
+            .attr("class", "country-path")
             // tooltips
             .on("mouseover",function(d){
                 tip.show(d);
@@ -153,23 +152,20 @@ function worldMap(data, color, key_score, key_rank){
     
     function onHoverStyle(p){
         d3.select(p)
-        .style("opacity", 1)
-        .style("stroke","white")
-        .style("stroke-width",2);
+          .classed("country-hovered",true)
+          .classed("country-default",false);
     }
 
     function selectedStyle(p){
         d3.select(p)
-          .style("opacity", 1)
-          .style("stroke","cyan") // TODO: create variable for selected color
-          .style("stroke-width",3);
+          .classed("country-selected",true)
+          //.classed("country-hovered",false);
     }
 
     function resetStyle(p){
         d3.select(p)
-          .style("opacity", 0.8)
-          .style("stroke","white")
-          .style("stroke-width",0.5);
+          .classed("country-selected",false)
+          .classed("country-hovered",false);
     }
 
     // TODO: Refactor! Perhaps send a callback function in the header that sets the selected data
