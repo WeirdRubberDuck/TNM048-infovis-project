@@ -30,7 +30,4 @@ function draw(error, data1, data2, data3){
   pc = new pc(data, color, key_score);
 
   map = new worldMap(data, color, key_score, key_rank);
-
-  stars = new starplot(data, color, key_score); //TODO: catch error or use id
-
 }

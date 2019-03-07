@@ -38,11 +38,25 @@ function worldMap(data, color, key_score, key_rank){
 
     svg.append("g")
        .attr("class", "colorLegend")
-       .attr("transform", "translate(-20," + (height - 120) + ")")
+       .attr("transform", "translate(-20," + (height - 140) + ")")
        .call(legend);
     
+
     // Color to use where there is no data
     var colorUndefined ="rgb(200,200,210)";
+
+    // Add legend for no data colour
+    var noDataLegend =  d3.legendColor()
+        .shapeWidth(30)
+        .orient('vertical')
+        .scale(d3.scaleOrdinal()
+            .domain(["No data"])
+            .range([colorUndefined]));
+                
+    svg.append("g")
+       .attr("class", "colorLegend")
+       .attr("transform", "translate(-20," + (height - 20) + ")")
+       .call(noDataLegend);
 
     var projection = d3.geoMercator()
                        .scale(130)
@@ -125,41 +139,52 @@ function worldMap(data, color, key_score, key_rank){
                     // Clear selection
                     selectedPath = null;
                     resetStyle(this);
+                    clearStarPlot() 
                 } else {
                     // Reset old selected
                     resetStyle(selectedPath);
                     // Set new selected
                     selectedPath = this;
                     selectedStyle(selectedPath);
-                }
+                    createStarPlot(selectedPath.__data__.id);
+                }   
             });
-            
-        function onHoverStyle(p){
-            d3.select(p)
-            .style("opacity", 1)
-            .style("stroke","white")
-            .style("stroke-width",2);
-        }
-
-        function selectedStyle(p){
-            d3.select(p)
-              .style("opacity", 1)
-              .style("stroke","cyan") // TODO: create variable for selected color
-              .style("stroke-width",3);
-        }
-
-        function resetStyle(p){
-            d3.select(p)
-              .style("opacity", 0.8)
-              .style("stroke","white")
-              .style("stroke-width",0.5);
-        }
-
-        svg.append("path")
-           .datum(topojson.mesh(mapData.features, function(a, b) { return a.id !== b.id; }))
-           .attr("class", "names")
-           .attr("d", path);
     }
+    
+    function onHoverStyle(p){
+        d3.select(p)
+        .style("opacity", 1)
+        .style("stroke","white")
+        .style("stroke-width",2);
+    }
+
+    function selectedStyle(p){
+        d3.select(p)
+          .style("opacity", 1)
+          .style("stroke","cyan") // TODO: create variable for selected color
+          .style("stroke-width",3);
+    }
+
+    function resetStyle(p){
+        d3.select(p)
+          .style("opacity", 0.8)
+          .style("stroke","white")
+          .style("stroke-width",0.5);
+    }
+
+    // TODO: Refactor! Perhaps send a callback function in the header that sets the selected data
+    var starDiv = '#star-plot';
+
+    function createStarPlot(id) {
+        clearStarPlot();
+        var item = data.filter(function(d){return d.id == selectedPath.__data__.id;});
+        starplot(data, item, color, key_score, starDiv);
+    }
+
+    function clearStarPlot() {
+        d3.select(starDiv).selectAll("*").remove();
+    }
+
 
 } // end of worldMap
 
