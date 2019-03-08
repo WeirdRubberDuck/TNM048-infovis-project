@@ -176,6 +176,9 @@ function worldMap(data){
     // TODO: Refactor! Perhaps send a callback function in the header that sets the selected data
     var detailsDiv = '#country-details';
 
+    // Always show info at start. 
+    showInfo();
+
     function createStarPlot(id) {
         clearStarPlot();
         var item = data.find(function(d){return d.id == selectedPath.__data__.id;});
@@ -184,6 +187,14 @@ function worldMap(data){
 
     function clearStarPlot() {
         d3.select(detailsDiv).selectAll("*").remove();
+        showInfo();
+    }
+
+    // Show info text when web page 
+    function showInfo() {
+        d3.select(detailsDiv).append("text")
+          .attr('text-anchor', 'middle')
+          .text("Click on a country to see details!");
     }
 
 } // end of worldMap
