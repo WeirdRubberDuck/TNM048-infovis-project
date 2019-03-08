@@ -40,8 +40,8 @@ function starplot(data, selectedData, div){
   }   
 
   // The dimensions to include in the plot, including labels and an array that will containt the scale for each dimension
-  var dimensions = ['Economy (GDP per Capita)','Family','Health (Life Expectancy)','Freedom','Trust (Government Corruption)','Generosity','Dystopia Residual'];
-  var labels = ['Economy','Family','Health','Freedom','Trust','Generosity','Dystopia Residual'];
+  var dimensions = ['Economy (GDP per Capita)','Family','Health (Life Expectancy)','Freedom','Trust (Government Corruption)','Generosity'];
+  var labels = ['Economy','Family','Health','Freedom','Trust','Generosity'];
   var scales = [];
 
   // Create the scale for each dimension depending on the data. The max value for the scale is 
@@ -60,7 +60,6 @@ function starplot(data, selectedData, div){
       dimensions[3],
       dimensions[4],
       dimensions[5],
-      dimensions[6],
     ])
     .scales(scales)
     .labels([
@@ -70,7 +69,6 @@ function starplot(data, selectedData, div){
       labels[3],
       labels[4],
       labels[5],
-      labels[6],
     ])
     .width(width)
     .margin(margin)
